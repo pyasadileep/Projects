@@ -1,13 +1,14 @@
-name: Java CI/CD to Azure
+name: Java Project 2 - CI/CD to Azure
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    paths:
+      - 'java-project/**'
+      - '.github/workflows/project2-java-azure.yml'
+    branches: ["main"]
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +22,11 @@ jobs:
           java-version: '17'
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file java-project/pom.xml
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "java-azure-demo-app"   # your Azure Web App Name
+          app-name: "java-azure-demo-app"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: target/*.jar
-
+          package: project2-java/target/*.jar
